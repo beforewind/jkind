@@ -14,6 +14,7 @@ import jkind.lustre.Expr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
 import jkind.lustre.VarDecl;
+import jkind.util.Util;
 
 public class DependencyMap {
 	private Map<Dependency, DependencySet> map = new HashMap<>();
@@ -25,7 +26,7 @@ public class DependencyMap {
 	}
 
 	private void computeOneStepDependencies(Node node) {
-		for (VarDecl input : node.inputs) {
+		for (VarDecl input : Util.getVarDecls(node)) {
 			map.put(new Dependency(input.id), new DependencySet());
 		}
 		

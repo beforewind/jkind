@@ -192,16 +192,16 @@ public class StaticAnalyzer {
 	}
 
 	private static boolean assignmentsSound(Node node) {
-		Set<String> toAssign = new HashSet<>();
-		toAssign.addAll(Util.getIds(node.outputs));
-		toAssign.addAll(Util.getIds(node.locals));
+		Set<String> assignable = new HashSet<>();
+		assignable.addAll(Util.getIds(node.outputs));
+		assignable.addAll(Util.getIds(node.locals));
 		Set<String> assigned = new HashSet<>();
 		boolean sound = true;
 
 		for (Equation eq : node.equations) {
 			for (IdExpr idExpr : eq.lhs) {
-				if (toAssign.contains(idExpr.id)) {
-					toAssign.remove(idExpr.id);
+				if (assignable.contains(idExpr.id)) {
+					assignable.remove(idExpr.id);
 					assigned.add(idExpr.id);
 				} else if (assigned.contains(idExpr.id)) {
 					Output.error(idExpr.location, "variable '" + idExpr.id
@@ -212,11 +212,6 @@ public class StaticAnalyzer {
 					sound = false;
 				}
 			}
-		}
-
-		if (!toAssign.isEmpty()) {
-			Output.error("in node '" + node.id + "' variables must be assigned: " + toAssign);
-			sound = false;
 		}
 
 		return sound;

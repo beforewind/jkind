@@ -43,7 +43,12 @@ public class InitialStepEvaluator extends Evaluator {
 		}
 		
 		evalStack.push(id);
-		Value value = equations.get(id).accept(this);
+		Expr eq = equations.get(id);
+		if (eq == null) {
+			return null;
+		}
+		
+		Value value = eq.accept(this);
 		values.put(id, value);
 		evalStack.pop();
 		
